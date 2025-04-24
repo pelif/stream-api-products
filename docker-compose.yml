@@ -1,0 +1,19 @@
+version: '2'
+services:
+    mysql:
+        image: mysql:5.7
+        container_name: mysql-api-products
+        ports:
+            - "3306:3306"
+        environment:
+            MYSQL_ROOT_PASSWORD: 1234567
+            MYSQL_DATABASE: apiProducts
+        networks:
+            apiProductsNetwork:
+                ipv4_address: 10.9.0.3
+networks:
+    apiProductsNetwork:
+        ipam:
+            config:
+                - subnet: 10.9.0.0/16
+                  gateway: 10.9.0.1
