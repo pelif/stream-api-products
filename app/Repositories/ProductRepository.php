@@ -3,8 +3,9 @@
 namespace App\Repositories;
 
 use App\Models\Product;
+use Illuminate\Support\Facades\Auth;
 
-class ProductRepository implements CategoryRepositoryInterface
+class ProductRepository implements ProductRepositoryInterface
 {
     protected $model = Product::class;
 
@@ -20,12 +21,18 @@ class ProductRepository implements CategoryRepositoryInterface
 
     public function store(array $data)
     {
+        $data['user_id'] = Auth::user()->id;
         return $this->model::create($data);
     }
 
     public function update($id, array $data)
     {
-        return $this->model::find($id)->update($data);
+        $update = $this->model::find($id)->update($data);
+
+        if ($update)
+            return $this->model::find($id);
+
+        throw new \Exception('Product not updated');
     }
 
     public function destroy($id)
